@@ -33,7 +33,6 @@ const Home = () => {
   return (
     <Container>
       <Box>
-        <Typography variant="h4">Completed Todos</Typography>
         {todos &&
           todos.map((todo) => (
             <TodoCard
