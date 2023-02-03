@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import "moment-timezone";
-import DayJS from "react-dayjs";
 
 import { deleteTodo, retrieveTodos } from "../state/actions/actionCreators";
 import TodoCard from "./TodoCard";
+import swal from "sweetalert";
 
 const Home = () => {
   const [isChecked, setIsChecked] = useState(false);
@@ -30,6 +30,25 @@ const Home = () => {
     dispatch(retrieveTodos());
   }, []);
 
+  const handleDelete = (id) => {
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this file!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        removeTutorial(id);
+        swal("Poof! Your file has been deleted!", {
+          icon: "success",
+        });
+      } else {
+        swal("Your file is safe!");
+      }
+    });
+  };
+
   return (
     <Container>
       <Box>
@@ -41,7 +60,7 @@ const Home = () => {
               description={todo.description}
               title={todo.title}
               link={"/todos/" + todo.id}
-              del={() => removeTutorial(todo.id)}
+              del={() => handleDelete(todo.id)}
               check={todo.isDone ? <Checkbox checked /> : ""}
             />
           ))}

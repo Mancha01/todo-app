@@ -9,6 +9,7 @@ import {
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
+import swal from "sweetalert";
 import { updateTodo } from "../state/actions/actionCreators";
 import TodoService from "../state/services/TodoService";
 
@@ -21,8 +22,6 @@ const EditTodo = (props) => {
   };
 
   const [currentTodo, setCurrentTodo] = useState(initialTodoState);
-
-  const [message, setMessage] = useState("");
 
   let isChecked = currentTodo.isDone ? "checked" : "";
 
@@ -46,10 +45,6 @@ const EditTodo = (props) => {
   useEffect(() => {
     getTutorial(todoId.id);
   }, [todoId.id]);
-
-  useEffect(() => {
-    getTutorial(todoId.id);
-  }, []);
 
   const updateStatus = () => {
     const data = {
@@ -81,7 +76,7 @@ const EditTodo = (props) => {
       .then((res) => {
         console.log(res);
 
-        setMessage("The todo was updated successfully");
+        swal("Status", "The todo was updated successfully", "success");
 
         setTimeout(() => {
           navigate("/");
@@ -137,10 +132,6 @@ const EditTodo = (props) => {
         <Button variant="contained" onClick={updateContent}>
           Update
         </Button>
-      </Box>
-
-      <Box>
-        <Typography variant="h6">{message}</Typography>
       </Box>
     </Container>
   );
