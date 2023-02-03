@@ -15,11 +15,14 @@ import store from "./state/store";
 import EditTodo from "./components/EditTodo";
 
 const App = () => {
+  const refreshPage = () => {
+    window.location.reload(false);
+  };
   return (
     <>
       <AppBar position="static" sx={{ paddingX: "10vw" }}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Link to={"/"} style={{ textDecoration: "none" }}>
+          <a href="/" style={{ textDecoration: "none" }}>
             <Typography
               variant="h3"
               component="div"
@@ -27,7 +30,8 @@ const App = () => {
             >
               Todos
             </Typography>
-          </Link>
+          </a>
+
           <Link to={"/add"} style={{ textDecoration: "none" }}>
             <Typography variant="h5" color={"whitesmoke"}>
               Add
