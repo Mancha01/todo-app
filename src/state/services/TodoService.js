@@ -20,12 +20,17 @@ const remove = (id) => {
   return http.delete(`/todos/${id}`);
 };
 
+const findByTitle = (title) => {
+  return http.get(`/todos?title=${title}`);
+};
+
 const TodoService = {
   getAll,
   get,
   create,
   update,
   remove,
+  findByTitle,
 };
 
 export default TodoService;

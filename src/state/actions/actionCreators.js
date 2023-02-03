@@ -56,3 +56,16 @@ export const deleteTodo = (id) => async (dispatch) => {
     console.log(err);
   }
 };
+
+export const findTodosByTitle = (title) => async (dispatch) => {
+  try {
+    const res = await TodoService.findByTitle(title);
+
+    dispatch({
+      type: actionTypes.RETRIEVE_TODOS,
+      payload: res.data,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
