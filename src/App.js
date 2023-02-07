@@ -1,23 +1,11 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  IconButton,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { AppBar, Container, Toolbar, Typography } from "@mui/material";
 import React from "react";
 import { Link, Route, Routes } from "react-router-dom";
 import Create from "./components/AddTodo";
 import Home from "./components/Home";
-import store from "./state/store";
 import EditTodo from "./components/EditTodo";
 
 const App = () => {
-  const refreshPage = () => {
-    window.location.reload(false);
-  };
   return (
     <>
       <AppBar position="static" sx={{ paddingX: "10vw" }}>

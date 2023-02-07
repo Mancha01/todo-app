@@ -1,33 +1,26 @@
-import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Button,
-  Checkbox,
-  Container,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
+import React, { useState, useEffect, Suspense } from "react";
+import { Box, Button, Checkbox, Container, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import "moment-timezone";
+import { Circle, DualRing, Ellipsis } from "react-awesome-spinners";
 
 import {
   deleteTodo,
   retrieveTodos,
   findTodosByTitle,
 } from "../state/actions/actionCreators";
-import TodoCard from "./TodoCard";
+
 import swal from "sweetalert";
+import useLocalStorage from "../useLocalStorage";
+import TodoCard from "./TodoCard";
 
 const Home = () => {
-  const [isChecked, setIsChecked] = useState(false);
+  const [todos, setTodos] = useLocalStorage("theTodos", []);
   const [searchTitle, setSearchTitle] = useState("");
-  const todos = useSelector((state) => state.todos);
+  const todosData = useSelector((state) => state.todos);
   const dispatch = useDispatch();
-
-  console.log(todos);
+  //const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   const onChangeSearchTitle = (e) => {
     const searchQueryTitle = e.target.value;
@@ -57,6 +50,10 @@ const Home = () => {
     dispatch(retrieveTodos());
   }, []);
 
+  useEffect(() => {
+    setTodos(todosData);
+  }, [todosData]);
+
   const handleDelete = (id) => {
     swal({
       title: "Are you sure?",
@@ -78,6 +75,8 @@ const Home = () => {
 
   return (
     <Container>
+      {/*loading state*/}
+      {todos.length === 0 && <Ellipsis />}
       <Box
         sx={{
           display: "flex",
@@ -102,19 +101,19 @@ const Home = () => {
           Search
         </Button>
       </Box>
+
       <Box>
-        {todos &&
-          todos.map((todo) => (
-            <TodoCard
-              key={todo.id}
-              date={<Moment>{todo.createdAt}</Moment>}
-              description={todo.description}
-              title={todo.title}
-              link={"/todos/" + todo.id}
-              del={() => handleDelete(todo.id)}
-              check={todo.isDone ? <Checkbox checked /> : ""}
-            />
-          ))}
+        {todos.map((todo) => (
+          <TodoCard
+            key={todo.id}
+            date={<Moment>{todo.createdAt}</Moment>}
+            description={todo.description}
+            title={todo.title}
+            link={`/todos/${todo.id}`}
+            del={() => handleDelete(todo.id)}
+            check={todo.isDone ? <Checkbox checked /> : ""}
+          />
+        ))}
       </Box>
     </Container>
   );

@@ -1,114 +1,80 @@
 import { Box, Button, Container, TextField } from "@mui/material";
-import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createTodo } from "../state/actions/actionCreators";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import swal from "sweetalert";
+import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 
 const AddTodo = () => {
-  const initialTodoState = {
-    id: null,
-    title: "",
-    description: "",
-    isDone: false,
-  };
-
-  const [todo, setTodo] = useState(initialTodoState);
-  const [submitted, setSubmitted] = useState(false);
-
-  const { title, description } = todo;
-
-  const initialValues = {
-    title,
-    description,
-  };
-
-  const validationSchema = Yup.object().shape({
-    title: Yup.string()
-      .min(5, "Minimum length of title is 5 characters")
-      .max(35, "Maximum length of title is 35 characters")
-      .required("Title is required"),
-    description: Yup.string()
-      .min(5, "Minimum length of title is 5 characters")
-      .max(35, "Maximum length of title is 35 characters")
-      .required("Description is required"),
-  });
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-
-    setTodo({ ...todo, [name]: value });
-  };
-
-  const saveTutorial = () => {
-    const { title, description } = todo;
-    dispatch(createTodo(title, description))
-      .then((data) => {
-        setTodo({
-          id: data.id,
-          title: data.title,
-          description: data.description,
-          isDone: data.isDone,
-        });
-
-        setSubmitted(true);
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
-        console.log(data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-
-  const newTodo = () => {
-    setTodo(initialTodoState);
-    setSubmitted(false);
-  };
+  const validationSchema = Yup.object().shape({
+    title: Yup.string()
+      .min(5, "String must be at least 5 characters long")
+      .max(35, "String must be less than 35 characters")
+      .required("This field is required"),
+    description: Yup.string()
+      .min(10, "String must be at least 10 characters long")
+      .max(50, "String must be less than 50 characters")
+      .required("This field is required"),
+  });
 
   return (
     <Container>
       <Formik
-        initialValues={initialValues}
+        initialValues={{
+          title: "",
+          description: "",
+        }}
         validationSchema={validationSchema}
-        onSubmit={saveTutorial}
+        onSubmit={(values, { setSubmitting }) => {
+          dispatch(createTodo(values.title, values.description))
+            .then((data) => {
+              swal("Status", "The todo was added successfully", "success");
+
+              setTimeout(() => {
+                navigate("/");
+              }, 1000);
+              console.log(data);
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+          setSubmitting(false);
+        }}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, errors, touched }) => (
           <Form>
             <Box>
               <Box>
-                <TextField
-                  label="title"
+                <Field
+                  as={TextField}
+                  label="Title"
+                  error={Boolean(touched.title && errors.title)}
+                  helperText={touched.title && errors.title}
                   variant="outlined"
                   fullWidth
+                  required
                   id="title"
-                  value={todo.title}
-                  onChange={handleInputChange}
                   name="title"
-                  type="text"
                 />
-
-                <ErrorMessage name="title" component="div" />
               </Box>
               <Box sx={{ marginTop: "25px", marginBottom: "25px" }}>
-                <TextField
-                  label="description"
+                <Field
+                  as={TextField}
+                  label="Description"
+                  error={Boolean(touched.description && errors.description)}
+                  helperText={touched.description && errors.description}
                   variant="outlined"
                   fullWidth
+                  required
                   id="description"
-                  value={todo.description}
-                  onChange={handleInputChange}
                   name="description"
-                  type="text"
                 />
-                <ErrorMessage name="description" component="div" />
               </Box>
-              <Button variant="contained" disabled={isSubmitting} type="submit">
+              <Button variant="contained" type="submit" disabled={isSubmitting}>
                 Submit
               </Button>
             </Box>
