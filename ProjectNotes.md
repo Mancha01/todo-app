@@ -14,3 +14,6 @@ https://www.bezkoder.com/node-js-tutorial/
 #React loading component libraries:
 https://morioh.com/p/8a4ed4780b9e
 
+#React's Suspense component for handling loading state:
+https://17.reactjs.org/docs/concurrent-mode-suspense.html
+

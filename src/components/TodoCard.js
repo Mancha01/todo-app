@@ -72,13 +72,13 @@ const TodoCard = ({ title, description, date, link, del, check }) => {
           flexDirection: "row",
           justifyContent: "space-around",
           alignItems: "center",
-          width: "50px",
+          width: "60px",
         }}
       >
         <NavLink to={link}>
-          <CiEdit size={18} style={{ cursor: "pointer" }} />
+          <CiEdit size={20} style={{ cursor: "pointer" }} />
         </NavLink>
-        <FcFullTrash size={18} style={{ cursor: "pointer" }} onClick={del} />
+        <FcFullTrash size={20} style={{ cursor: "pointer" }} onClick={del} />
       </Box>
     </Paper>
   );

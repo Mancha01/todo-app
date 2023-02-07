@@ -1,9 +1,9 @@
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button, Checkbox, Container, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import Moment from "react-moment";
 import "moment-timezone";
-import { Circle, DualRing, Ellipsis } from "react-awesome-spinners";
+import { HourGlass } from "react-awesome-spinners";
 
 import {
   deleteTodo,
@@ -76,7 +76,7 @@ const Home = () => {
   return (
     <Container>
       {/*loading state*/}
-      {todos.length === 0 && <Ellipsis />}
+      {todos.length === 0 && <HourGlass />}
       <Box
         sx={{
           display: "flex",
@@ -111,7 +111,9 @@ const Home = () => {
             title={todo.title}
             link={`/todos/${todo.id}`}
             del={() => handleDelete(todo.id)}
-            check={todo.isDone ? <Checkbox checked /> : ""}
+            check={
+              todo.isDone ? <Checkbox checked sx={{ cursor: "none" }} /> : ""
+            }
           />
         ))}
       </Box>
